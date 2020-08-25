@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     //TODO offload health into a Health.cs script
     [SerializeField] int _maxHealth = 3;
     int _currentHealth;
+    int _currentTreasure;
 
     BallMotor _ballMotor;
 
@@ -52,6 +53,12 @@ public class Player : MonoBehaviour
         {
             Kill();
         }
+    }
+
+    public void IncreaseTreasure(int amount)
+    {
+        _currentTreasure += amount;
+        Debug.Log("Player's treasure: " + _currentTreasure);
     }
 
     public void Kill()
