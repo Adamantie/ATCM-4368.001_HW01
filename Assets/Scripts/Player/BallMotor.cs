@@ -6,6 +6,11 @@ using UnityEngine.UI;
 public class BallMotor : MonoBehaviour {
 
     [SerializeField] float _maxSpeed = 10f;
+    public float MaxSpeed
+    {
+        get => _maxSpeed;
+        set => _maxSpeed = value;
+    }
     
     Rigidbody _rb;
 
