@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     int _currentHealth;
     int _currentTreasure;
 
+    public bool _invincibility = false;
+
     BallMotor _ballMotor;
 
     private void Awake()
@@ -40,19 +42,27 @@ public class Player : MonoBehaviour
 
     public void IncreaseHealth(int amount)
     {
-        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
         _currentHealth += amount;
+        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
         Debug.Log("Player's health: " + _currentHealth);
     }
 
     public void DecreaseHealth(int amount)
     {
-        _currentHealth -= amount;
-        Debug.Log("Player's health: " + _currentHealth);
-        if (_currentHealth <= 0)
+        if (_invincibility == false)
         {
-            Kill();
+            _currentHealth -= amount;
+            Debug.Log("Player's health: " + _currentHealth);
+            if (_currentHealth <= 0)
+            {
+                Kill();
+            }
         }
+        else
+        {
+            Debug.Log("Invincible");
+        }
+        
     }
 
     public void IncreaseTreasure(int amount)

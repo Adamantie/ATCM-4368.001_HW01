@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public abstract class CollectableBase : MonoBehaviour
+public abstract class PowerUpBase : MonoBehaviour
 {
-    protected abstract void Collect(Player player);
+    protected abstract void PowerUp(Player player);
+    protected abstract void PowerDown(Player player);
 
+    [SerializeField] float _powerupDuration = 5;
     [SerializeField] float _movementSpeed = 1;
-    protected float MovementSpeed {  get { return _movementSpeed; } }
+    protected float MovementSpeed { get { return _movementSpeed; } }
 
     [SerializeField] ParticleSystem _collectParticles;
     [SerializeField] AudioClip _collectSound;
@@ -37,11 +39,11 @@ public abstract class CollectableBase : MonoBehaviour
         Player player = other.gameObject.GetComponent<Player>();
         if (player != null)
         {
-            Collect(player);
+            PowerUp(player);
             //spawn particles and sfx because we need to disable object
             Feedback();
-
-            gameObject.SetActive(false);
+            Disable();
+            StartCoroutine(PowerUpDuration(player));
         }
     }
 
@@ -57,5 +59,19 @@ public abstract class CollectableBase : MonoBehaviour
         {
             AudioHelper.PlayClip2D(_collectSound, 0.25f);
         }
+    }
+
+    private void Disable()
+    {
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<Collider>().enabled = false;
+    }
+
+    IEnumerator PowerUpDuration(Player player)
+    {
+        yield return new WaitForSeconds(_powerupDuration);
+
+        PowerDown(player);
+        gameObject.SetActive(false);
     }
 }
